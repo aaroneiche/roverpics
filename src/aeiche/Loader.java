@@ -21,14 +21,19 @@ public class Loader {
         Gson gson = new Gson();
 
         try {
+            //BufferedReader reads in the data received from the request. It could be used for reading a file as well.
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
             String str; //A temporary var.
             String jsonString = ""; //the output
 
+            /*  Here is where the stream is read in. In our case, we don't have any line breaks, so it just
+                reads a single line.
+             */
             while ((str = br.readLine()) != null) {
                 jsonString = str;
             }
 
+            //GSON unpacks JSON into a matching class structure: Photos->Photo->Camera
             Photos p = new Photos();
             p = gson.fromJson(jsonString, Photos.class);
 
@@ -38,8 +43,8 @@ public class Loader {
             Iterator it = p.photos.iterator();
             while(it.hasNext()){
                 //add items to tree according to
-                Photo ph = (Photo)it.next();
-                pmap.put(ph.getId(), ph);
+                Photo ph = (Photo)it.next();    //Gets the next item in Photos, and casts it as a Photo
+                pmap.put(ph.getId(), ph);       //Adds that photo to the Map with a key of the Id.
             }
 
             return pmap;
